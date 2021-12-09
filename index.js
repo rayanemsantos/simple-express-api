@@ -1,4 +1,10 @@
 const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
+const uri = "mongodb+srv://uniforspotifyproject:7BTKZRmGja2Yjed@spotifynodeapp.xpryx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect();
+const db = client.db("spotify");
+
 const cors = require('cors')({origin: true});
 
 const app = express();
@@ -13,7 +19,17 @@ const playlists = [
         "type": "playlist",
         "link": "afrobeat-essentials",
         "playlist": "afrobeatessentials",
-        "owner": "spotify"
+        "owner": "spotify",
+        "user": "61b247a759efecd7d4958a07",
+        "musics": [
+            "61b268d065e41d9fdbf4eed9",
+            "61b268d065e41d9fdbf4eeda",
+            "61b268d065e41d9fdbf4eedb",
+            "61b268d065e41d9fdbf4eedc",
+            "61b268d065e41d9fdbf4eedd",
+            "61b268d065e41d9fdbf4eede"
+        ]
+
     },
     {
         "id": 2,
@@ -22,7 +38,13 @@ const playlists = [
         "type": "playlist",
         "link": "orgulho-tropical",
         "playlist": "orgulhotropical",
-        "owner": "spotify"
+        "owner": "spotify",
+        "user": "61b247a759efecd7d4958a07",
+        "musics": [
+            "61b268d065e41d9fdbf4eedc",
+            "61b268d065e41d9fdbf4eedd",
+            "61b268d065e41d9fdbf4eede"
+        ]
     },
     {
         "id": 3,
@@ -32,7 +54,11 @@ const playlists = [
         "type": "playlist",
         "link": "brega-funk",
         "playlist": "bregafunk",
-        "owner": "spotify"
+        "owner": "spotify",
+        "user": "61b247a759efecd7d4958a07",
+        "musics": [
+            "61b268d065e41d9fdbf4eede"
+        ]
     },
     {
         "id": 4,
@@ -41,7 +67,11 @@ const playlists = [
         "type": "playlist",
         "link": "frevo-folia",
         "playlist": "frevofolia",
-        "owner": "spotify"
+        "owner": "spotify",
+        "user": null,
+        "musics": [
+            "61b268d065e41d9fdbf4eedc",
+        ]
     },
     {
         "id": 5,
@@ -50,94 +80,61 @@ const playlists = [
         "type": "playlist",
         "link": "equal-brasil",
         "playlist": "equalbrasil",
-        "owner": "spotify"
+        "owner": "spotify",
+        "user": null,
+        "musics": [
+            "61b268d065e41d9fdbf4eedd",
+        ]
     }
 ]
-
-const recentlyplayed = [
-    {
-        "title": "This is Charlie Brown Jr.",
-        "subtitle":
-            "Da baixada santista para os maiores palcos do Brasil! Relembre os grandes sucessos da banda.",
-        "type": "playlist"
-    },
-    {
-        "title": "Indo e Voltando",
-        "type": "podcast"
-    },
-    {
-        "title": "QuebraDev",
-        "type": "podcast"
-    },
-    {
-        "title": "Frozen 2 (Original Motion Picture Soundtrack)",
-        "type": "álbum"
-    },
-    {
-        "title": "Indigo Borboleta Anil",
-        "type": "álbum"
-    },
-    {
-        "title": "Sextou Gostosin",
-        "type": "playlist"
-    }
-]
-
-const podcasts = [
-    {
-        "title": "Indo e Voltando",
-        "type": "podcast"
-    },
-    {
-        "title": "QuebraDev",
-        "type": "podcast"
-    },
-    {
-        "title": "Café da Manhã",
-        "subtitle": "Spotify Studios",
-        "type": "podcast"
-    },
-    {
-        "title": "Histórias de Ninar para Garotas Rebeldes",
-        "type": "podcast"
-    },
-    {
-        "title": "Layers Ponto Tech",
-        "type": "podcast"
-    }
-]
-
-const dailymixes =  [
+const tracks =  [
     {
         "title": "Daily Mix 1",
         "subtitle": "Luedji Luna, Charlie Brown Jr., Tom Zé e mais",
-        "type": "daily mix"
+        "type": "track",
+        "artist": "Luedji Luna",
+        "album": "Luedji Luna Album",
+        "durantion":"3:35"
     },
     {
         "title": "Daily Mix 2",
         "subtitle": "Epic Nature, Skyyy, HD Rain and Water e mais",
-        "type": "daily mix"
+        "type": "track",
+        "artist": "Epic Nature",
+        "album": "Epic Nature Album",
+        "durantion":"3:35"
     },
     {
         "title": "Daily Mix 3",
         "subtitle": "Liniker, Linn da Quebrada, Valuá e mais",
-        "type": "daily mix"
+        "type": "track",
+        "artist": "Liniker",
+        "album": "Liniker Album",
+        "durantion":"3:35"
     },
     {
         "title": "Daily Mix 4",
         "subtitle": "Cardi B, Lizzo, Doja Cat e mais",
-        "type": "daily mix"
+        "type": "track",
+        "artist": "Cardi B",
+        "album": "Cardi B Album",
+        "durantion":"3:35"
     },
     {
         "title": "Daily Mix 5",
-        "subtitle":
-            "Kristen Anderson-Lopez, Kristen Bell, Christopher Jackson e mais",
-        "type": "daily mix"
+        "subtitle":"Kristen Anderson-Lopez, Kristen Bell, Christopher Jackson e mais",
+        "type": "track",
+        "artist": "Kristen Anderson-Lopez",
+        "album": "Kristen Anderson-Lopez Album",
+        "durantion":"3:35"
     },
     {
         "title": "Daily Mix 6",
         "subtitle": "Alaska Thunderfuck, Jessie Ware, Billie Eilish e mais",
-        "type": "daily mix"
+        "type": "track",
+        "artist": "Alaska Thunderfuck",
+        "album": "Alaska Thunderfuck Album",
+        "durantion":"3:35"
     }
 ]
 
@@ -152,23 +149,201 @@ app.use('/routes',function(req, res, next){
     return res.status(200).json(routes) && next();
 });
 
+// USERS 
+app.post('/api/user/register', (req, res) => {     
+    const user = db .collection("users")
+    user
+    .findOne({email:req.body.email}, function (err, result) {
+        if (err) {
+            res.status(400).send("Error checking user");
+        } else {
+        if (result)
+            res.status(400).send({error: true, message: "User already exists"});
+        else
+            user
+            .insertOne(req.body, (function (err, result) {
+                if (err) {
+                res.status(400).send("Error creating user");
+            } else {
+                res.json({id: result.insertedId});
+                }
+            })); 
+        }
+    })     
+    return res
+});
+
+app.post('/api/user/login', (req, res) => {  
+    const user = db .collection("users")   
+    console.log(req.body.email)
+    user
+    .findOne({email:req.body.email}, function (err, result) {
+      if (err) {
+        res.status(400).send("Error authenticating user");
+     } else {
+        if (result)
+            res.json(result);
+        else
+            res.status(400).send({error: true, message: "Object does not exist"});
+      }
+    });      
+    return res
+});
+
+app.post('/api/user/update', (req, res) => {     
+    const user = db .collection("users")   
+    user
+    .updateOne({_id: new ObjectId(req.body.id)}, { $set: {...req.body} }, function (err, result) {
+      if (err) {
+        res.status(400).send("Error updating user");
+     } else {
+        if (result && result.acknowledged)
+            res.json(result);
+        else
+            res.status(400).send({error: true, message: 'Error updating user'});
+      }
+    });      
+    return res
+});
+
+// MUSICS
+app.get('/api/musics', (req, res) => {
+    var type = req.params.type;
+    const music = db .collection("musics")   
+    music
+    .find({}).limit(50)
+    .toArray(function (err, result) {
+      if (err) {
+        res.status(400).send("Error fetching listings!");
+     } else {
+        res.json(result);
+      }
+    });     
+    return res
+});
+
+
+app.post('/api/musics/', (req, res) => {
+    const music = db .collection("musics")   
+    music
+    .insertMany(tracks, function (err, result) {
+      if (err) {
+        res.status(400).send("Error listing musics");
+     } else {
+        res.json(result);
+      }
+    });      
+    return res
+});
+
+
 // PLAYLISTS
 app.get('/api/playlists/:id', (re, res) => {
-    var id = re.params.id;
-    let playlist = playlists.find((p) => p.id == id)
-    if (playlist){
-        return res.status(200).json(playlist);   
+    var id = re.params.id;  
+    db
+    .collection("playlists")
+    .findOne({_id: new ObjectId(id)}, async function (err, result) {
+      if (err) {
+        res.status(400).send("Error fetching listings!");
+     } else {
+        const music = db .collection("musics")   
+        var musics = []
+        var pro2 = null 
+        const pro = new Promise((resolve, reject) => {
+            resolve(result.musics.map(async (r) => {
+                pro2 = new Promise((resolve2, reject2) => { 
+                    music
+                    .findOne({_id: new ObjectId(r)}, function (err, resultMusic) {
+                        if (err) {
+                            console.log(err)
+                            reject2()
+                        } else {
+                            musics.push(resultMusic)
+                            resolve2()
+                        }
+                    });
+                })
+            }))  
+        })  
+        Promise.all([pro, pro2]).then(() => {
+            res.json({...result, musics:musics}); 
+        })
+      }
+    });      
+    return res
+});
+
+app.put('/api/playlists/:id/music/:id_music/remove', (re, res) => {
+    var id = re.params.id;  
+    var id_music = re.params.id_music;  
+    db
+    .collection("playlists")
+    .updateOne({_id: new ObjectId(id)}, { $pull: {
+        musics: id_music
+    }}
+    , function (err, result) {
+        if (err) {
+          res.status(400).send("Error updating user");
+       } else {
+          if (result)
+              res.json(result);
+          else
+              res.status(400).send({error: true, message: 'Error updating user'});
+        }
+    });    
+    return res
+});
+
+app.post('/api/playlists/music/:music_id/add', (req, res) => {
+    var music_id = req.params.music_id;  
+    var user = req.body.user;  
+    let playlist = {
+        user: user,
+        title: "Sua nova playlist",
+        type: "playlist",
+        link: "afrobeat-essentials",
+        playlist: "nova-playlist",
+        owner: "spotify",        
+        musics: [music_id]
     }
-    return res.status(400).json({"error": true, "message": "object does not exist"});   
+    db
+    .collection("playlists")
+    .insertOne(playlist, async function (err, result) {
+      if (err) {
+        res.status(400).send("Error adding playlist!");
+     } else {
+        res.json(result);
+      }
+    });      
+    return res
 });
 
-app.get('/api/playlists', (re, res) => {
-    return res.status(200).json(playlists);   
+app.get('/api/playlists', (req, res) => {  
+    var user_id = req.query.user;  
+    db
+    .collection("playlists")
+    .find(user_id ? {user: user_id} : {user: null})
+    .toArray(function (err, result) {
+      if (err) {
+        res.status(400).send("Error fetching listings!");
+     } else {
+        res.json(result);
+      }
+    });      
+    return res
 });
 
-// PODCASTS
-app.get('/api/podcasts', (re, res) => {
-    return res.status(200).json(podcasts);   
+app.post('/api/playlists', (req, res) => {
+    const music = db .collection("playlists")   
+    music
+    .insertMany(playlists, function (err, result) {
+      if (err) {
+        res.status(400).send("Error listing musics");
+     } else {
+        res.json(result);
+      }
+    });      
+    return res
 });
 
 // MUSICS
