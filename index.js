@@ -175,7 +175,6 @@ app.post('/api/user/register', (req, res) => {
 
 app.post('/api/user/login', (req, res) => {  
     const user = db .collection("users")   
-    console.log(req.body.email)
     user
     .findOne({email:req.body.email}, function (err, result) {
       if (err) {
@@ -190,7 +189,7 @@ app.post('/api/user/login', (req, res) => {
     return res
 });
 
-app.post('/api/user/update', (req, res) => {     
+app.put('/api/user/update', (req, res) => {     
     const user = db .collection("users")   
     user
     .updateOne({_id: new ObjectId(req.body.id)}, { $set: {...req.body} }, function (err, result) {
@@ -344,14 +343,6 @@ app.post('/api/playlists', (req, res) => {
       }
     });      
     return res
-});
-
-// MUSICS
-app.get('/api/recently_played', (re, res) => {
-    return res.status(200).json(recentlyplayed);   
-});
-app.get('/api/dailymixes', (re, res) => {
-    return res.status(200).json(dailymixes);   
 });
 
 app.listen(21262, () => {
